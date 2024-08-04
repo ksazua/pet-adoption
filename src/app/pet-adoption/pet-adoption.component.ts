@@ -194,10 +194,6 @@ export class PetAdoptionComponent implements OnInit {
     }
   }
 
-  formatPreviousPets(previousPets: boolean): string {
-    return previousPets ? 'Sí' : 'No';
-  }
-
   capitalizeFirstLetter(value: string): string {
     if (!value) return value;
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
