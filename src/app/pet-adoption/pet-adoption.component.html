@@ -98,11 +98,11 @@
       <div class="w-2/3">
         <div class="flex space-x-6 mb-4">
           <div class="w-1/2 p-4 bg-white shadow-md rounded-md flex items-center space-x-4">
-            <div class="bg-yellow-100 text-yellow-400 w-8 h-8 flex items-center justify-center rounded-md">
-              <i class="pi pi-envelope"></i>
+            <div [ngClass]="getStatusBoxClass()">
+              <i [class]="getStatusIcon()"></i>
             </div>
             <div>
-              <h3 class="font-bold text-gray-800 text-sm">Revisión iniciada</h3>
+              <h3 class="font-bold text-gray-800 text-sm">{{ getStatusText() }}</h3>
             </div>
           </div>
           <div class="w-1/2 p-4 bg-white shadow-md rounded-md flex items-center space-x-4"

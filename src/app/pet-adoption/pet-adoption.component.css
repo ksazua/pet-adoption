@@ -307,3 +307,15 @@
 .text-14 {
   font-size: 14px;
 }
+
+.bg-red-200 {
+  background-color: #fecaca;
+}
+
+.text-red-700 {
+  color: #b91c1c;
+}
+
+.bg-red-500 {
+  background-color: #ef4444;
+}

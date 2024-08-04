@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AdoptionService} from '../services/adoption.service';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
-import Swal from 'sweetalert2'; // Importa Swal
+import Swal from 'sweetalert2';
 
-// Definición de la interfaz PetAdoption para tipar los datos de adopción de mascotas
 interface PetAdoption {
   id: number;
   firstName: string;
@@ -18,32 +17,27 @@ interface PetAdoption {
   ocupacion: string;
 }
 
-// Definición de la interfaz Step para tipar los pasos del proceso de adopción
 interface Step {
   label: string;
   icon: string;
   date: string;
-  status: 'completed' | 'current' | 'hold' | 'upcoming';
+  status: 'completed' | 'current' | 'hold' | 'upcoming' | 'rejected';
 }
 
-// Decorador del componente Angular
 @Component({
   selector: 'app-pet-adoption',
   templateUrl: './pet-adoption.component.html',
   styleUrls: ['./pet-adoption.component.css'],
 })
 export class PetAdoptionComponent implements OnInit {
-  // Propiedades del componente
-  petAdoptions: PetAdoption[] = []; // Lista de adopciones de mascotas
-  user: any; // Información del usuario actual
-  form!: any; // Formulario de adopción
+  petAdoptions: PetAdoption[] = [];
+  user: any;
+  form!: any;
 
-  // Pasos del proceso de adopción
   steps: Step[] = [
     {label: 'Solicitud', icon: 'pi pi-file', date: 'Jul 12', status: 'completed'},
   ];
 
-  // Constructor del componente con inyección de dependencias
   constructor(
     private adoptionService: AdoptionService,
     private authService: AuthService,
@@ -51,19 +45,16 @@ export class PetAdoptionComponent implements OnInit {
   ) {
   }
 
-  // Método que se ejecuta al inicializar el componente
   ngOnInit(): void {
     this.loadUserAdoptions();
   }
 
-  // Carga las adopciones del usuario actual
   loadUserAdoptions(): void {
     const email = localStorage.getItem('email');
 
     if (email) {
       this.authService.getCurrentUser(email).subscribe(
         (response) => {
-          // Asigna la respuesta del servicio a las propiedades del componente
           this.form = response;
           this.user = {
             firstName: response.name,
@@ -83,10 +74,9 @@ export class PetAdoptionComponent implements OnInit {
             estadoValidacionFormulario: response.estadoValidacionFormulario
           };
 
-          // Actualiza los pasos del proceso según el estado de validación del formulario
           if (response.estadoValidacionFormulario == 'pending') {
             this.steps.push(
-              {label: 'Pendiente', icon: 'pi pi-check', date: 'Jul 12', status: 'hold'},
+              {label: 'Pendiente', icon: 'pi pi-pause', date: 'Jul 12', status: 'hold'}, // Cambiado aquí
             )
           }
           if (response.estadoValidacionFormulario == 'approved') {
@@ -96,15 +86,14 @@ export class PetAdoptionComponent implements OnInit {
           }
           if (response.estadoValidacionFormulario == 'rejected') {
             this.steps.push(
-              {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'upcoming'},
+              {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'rejected'},
             )
           }
 
-          // Actualiza los pasos del proceso según el estado de validación del pago
           if (response.estadoValidacionFormulario == 'approved') {
             if (response.estadoValidacionPago == 'pending') {
               this.steps.push(
-                {label: 'Pendiente', icon: 'pi pi-check', date: 'Jul 12', status: 'hold'},
+                {label: 'Pendiente', icon: 'pi pi-pause', date: 'Jul 12', status: 'hold'}, // Cambiado aquí también
               )
             }
             if (response.estadoValidacionPago == 'approved') {
@@ -114,7 +103,7 @@ export class PetAdoptionComponent implements OnInit {
             }
             if (response.estadoValidacionPago == 'rejected') {
               this.steps.push(
-                {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'completed'},
+                {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'rejected'},
               )
             }
           }
@@ -126,12 +115,10 @@ export class PetAdoptionComponent implements OnInit {
     }
   }
 
-  // Obtiene las iniciales del nombre y apellido del usuario
   getInitials(firstName: string, lastName: string): string {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`;
   }
 
-  // Obtiene la clase CSS para un paso del proceso según su estado
   getStepClass(step: Step): string {
     switch (step.status) {
       case 'completed':
@@ -142,18 +129,24 @@ export class PetAdoptionComponent implements OnInit {
         return 'bg-yellow-400 text-white hold';
       case 'upcoming':
         return 'bg-gray-400 text-white';
+      case 'rejected':
+        return 'bg-red-200 text-red-700';
       default:
         return '';
     }
   }
 
-  // Obtiene la clase CSS para el separador entre pasos del proceso
   getSeparatorClass(index: number): string {
     if (index < this.steps.length - 1) {
-      if (this.steps[index].status === 'completed' && this.steps[index + 1].status === 'completed') {
+      const currentStep = this.steps[index];
+      const nextStep = this.steps[index + 1];
+
+      if (currentStep.status === 'completed' && nextStep.status === 'completed') {
         return 'bg-green-500';
-      } else if (this.steps[index].status === 'completed' && this.steps[index + 1].status === 'hold') {
+      } else if (currentStep.status === 'completed' && nextStep.status === 'hold') {
         return 'bg-yellow-400';
+      } else if (currentStep.status === 'completed' && nextStep.status === 'rejected') {
+        return 'bg-red-500';
       } else {
         return 'bg-gray-300';
       }
@@ -161,12 +154,10 @@ export class PetAdoptionComponent implements OnInit {
     return '';
   }
 
-  // Verifica si el pago está habilitado
   isPaymentEnabled(): boolean {
     return this.form?.estadoValidacionFormulario === 'approved';
   }
 
-  // Maneja el clic en el botón de pago
   handlePaymentClick(): void {
     if (!this.isPaymentEnabled()) {
       Swal.fire({
@@ -180,7 +171,6 @@ export class PetAdoptionComponent implements OnInit {
     }
   }
 
-  // Navega a la página de carga de archivos si el pago está habilitado
   handlePaymentNavigation(): void {
     if (this.isPaymentEnabled()) {
       this.router.navigate(['/upload-file', this.form.id]);
@@ -194,7 +184,6 @@ export class PetAdoptionComponent implements OnInit {
     }
   }
 
-  // Obtiene la imagen de la mascota según su tipo
   getPetImage(petType: string): string {
     if (petType.toLowerCase() === 'gato') {
       return 'https://res.cloudinary.com/ddodvvqcq/image/upload/v1722742575/img/CatAvatar.jpg';
@@ -205,14 +194,41 @@ export class PetAdoptionComponent implements OnInit {
     }
   }
 
-  // Formatea el valor de previousPets a 'Sí' o 'No'
   formatPreviousPets(previousPets: boolean): string {
     return previousPets ? 'Sí' : 'No';
   }
 
-  // Capitaliza la primera letra de un valor
   capitalizeFirstLetter(value: string): string {
     if (!value) return value;
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  }
+  getStatusBoxClass(): string {
+    if (this.user?.estadoValidacionFormulario === 'rejected') {
+      return 'bg-red-100 text-red-500 w-8 h-8 flex items-center justify-center rounded-md';
+    } else if (this.user?.estadoValidacionFormulario === 'approved') {
+      return 'bg-blue-100 text-blue-500 w-8 h-8 flex items-center justify-center rounded-md';
+    } else {
+      return 'bg-yellow-100 text-yellow-400 w-8 h-8 flex items-center justify-center rounded-md';
+    }
+  }
+
+  getStatusIcon(): string {
+    if (this.user?.estadoValidacionFormulario === 'rejected') {
+      return 'pi pi-times';
+    } else if (this.user?.estadoValidacionFormulario === 'approved') {
+      return 'pi pi-clock';
+    } else {
+      return 'pi pi-envelope';
+    }
+  }
+
+  getStatusText(): string {
+    if (this.user?.estadoValidacionFormulario === 'rejected') {
+      return 'Solicitud rechazada';
+    } else if (this.user?.estadoValidacionFormulario === 'approved') {
+      return 'En espera de su comprobante';
+    } else {
+      return 'Revisión iniciada';
+    }
   }
 }
