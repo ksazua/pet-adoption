@@ -2,6 +2,7 @@ import {Component, ChangeDetectorRef, ViewEncapsulation, inject} from '@angular/
 import {ConfirmationService} from "primeng/api";
 import Swal from "sweetalert2";
 import {Form, FormularioService} from "../services/formulario.service";
+import {User} from "../services/admin.service";
 
 interface PetAdoption {
   id: number;
@@ -30,8 +31,14 @@ interface Event {
 export class TablaValidacionComprobanteComponent {
   private readonly formularioService = inject(FormularioService);
   protected forms: Form[] = [];
+  user: User | null = null;
 
   constructor(private cd: ChangeDetectorRef) {
+    this.user = {
+      name: localStorage.getItem('name')!,
+      email: localStorage.getItem('email')!,
+      role: localStorage.getItem('role')!,
+    };
     this.fetchForms();
   }
 
@@ -126,7 +133,7 @@ export class TablaValidacionComprobanteComponent {
     return `${(completedCount / this.petAdoptions.length) * 100}%`;
   }
 
-  // Función para obtener las iniciales
+  // Función para obtener iniciales
   getInitials(firstName: string, lastName: string): string {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`;
   }

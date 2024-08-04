@@ -16,7 +16,7 @@ export class TablaValidaFormularioComponent implements OnInit {
   currentPage: number = 1;
   originalForms: Form[] = [];
   user: User | null = null;
-  userPassword: string = 'admin123'; // Contraseña correcta del administrador
+  userPassword: string = 'admin123';
 
 
   constructor(private formularioService: FormularioService, private adminService: AdminService, private router: Router) {

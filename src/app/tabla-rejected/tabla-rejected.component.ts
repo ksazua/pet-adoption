@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormularioService, Form } from '../services/formulario.service';
+import {User} from "../services/admin.service";
 
 @Component({
   selector: 'app-tabla-rejected',
@@ -8,8 +9,15 @@ import { FormularioService, Form } from '../services/formulario.service';
 })
 export class TablaRejectedComponent implements OnInit {
   forms: Form[] = [];
+  user: User | null = null;
 
-  constructor(private formularioService: FormularioService) { }
+  constructor(private formularioService: FormularioService) {
+    this.user = {
+      name: localStorage.getItem('name')!,
+      email: localStorage.getItem('email')!,
+      role: localStorage.getItem('role')!,
+    };
+  }
 
   ngOnInit(): void {
     this.fetchRejectedForms();
