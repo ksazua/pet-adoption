@@ -135,4 +135,9 @@ export class TablaValidaFormularioComponent implements OnInit {
     this.forms = this.forms.filter(form => form.id !== id);
     this.originalForms = this.originalForms.filter(form => form.id !== id);
   }
+    // Función para obtener iniciales
+    getInitials(firstName: string, lastName: string): string {
+      return `${firstName.charAt(0)}${lastName.charAt(0)}`;
+    }
+
 }

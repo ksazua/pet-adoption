@@ -23,7 +23,7 @@
       <div *ngIf="user" class="w-12 h-12 rounded-full mx-auto bg-gray-300 flex items-center justify-center text-xs font-bold text-white" style="background-color: #EC4899;">
         {{ user.email.slice(0, 2).toUpperCase() }} <!-- Dos primeras iniciales del correo -->
       </div>
-      <h2 class="mt-2 text-xs" *ngIf="user">Hola, {{ user.email }}</h2>
+      <h2 class="mt-2 text-xs" *ngIf="user">{{ user.email }}</h2>
       <p class="text-gray-600 text-xs" *ngIf="user">{{ user.role }}</p>
     </div>
 
@@ -61,8 +61,8 @@
       <table class="min-w-full bg-white">
         <thead>
         <tr>
-          <th class="py-2 px-4 bg-gray-200 text-sm">ID</th>
-          <th class="py-2 px-4 bg-gray-200 text-sm">Foto</th>
+          <th class="py-2 px-4 bg-gray-200 text-sm"></th>
+          <th class="py-2 px-4 bg-gray-200 text-sm">Cédula</th>
           <th class="py-2 px-4 bg-gray-200 text-sm">Nombre y Apellido</th>
           <th class="py-2 px-4 bg-gray-200 text-sm">Correo</th>
           <th class="py-2 px-4 bg-gray-200 text-sm">Teléfono</th>
@@ -73,12 +73,12 @@
         </thead>
         <tbody>
         <tr *ngFor="let adoption of forms" class="text-center border-b">
-          <td class="py-2 px-4 text-14">{{ adoption.id }}</td>
           <td class="py-2 px-4 text-14">
             <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
               {{ getInitials(adoption.name, adoption.lastName) }}
             </div>
           </td>
+          <td class="py-2 px-4 text-14">{{ adoption.dni }}</td>
           <td class="py-2 px-4 text-14">{{ adoption.name }} {{ adoption.lastName }}</td>
           <td class="py-2 px-4 text-14">{{ adoption.email }}</td>
           <td class="py-2 px-4 text-14">{{ adoption.phoneNumber }}</td>

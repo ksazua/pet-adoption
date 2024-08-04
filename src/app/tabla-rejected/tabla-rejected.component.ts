@@ -33,5 +33,9 @@ export class TablaRejectedComponent implements OnInit {
       }
     );
   }
+      // Función para obtener iniciales
+      getInitials(firstName: string, lastName: string): string {
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`;
+      }
 }
 
