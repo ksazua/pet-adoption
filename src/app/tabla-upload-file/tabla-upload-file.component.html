@@ -1,0 +1,51 @@
+<!-- Encabezado -->
+<header class="flex justify-between items-center py-4 px-8 bg-white shadow-md mb-0">
+  <div class="flex items-center">
+    <h1 class="text-2xl font-bold">ProyectoAdoptame</h1>
+  </div>
+  <div class="flex items-center space-x-4">
+    <!-- Imagen de perfil con iniciales -->
+    <div class="relative">
+      <img *ngIf="user?.photoUrl" [src]="user.photoUrl" alt="User" class="w-10 h-10 rounded-full">
+      <div *ngIf="!user?.photoUrl" class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs font-bold">
+        {{ getInitials(user?.firstName, user?.lastName) }}
+      </div>
+    </div>
+    <!-- Botón de notificaciones (campana) -->
+    <button type="button" pButton icon="pi pi-bell" class="p-button p-button-icon-only"></button>
+    <!-- Botón de cerrar sesión -->
+    <button type="button" pButton icon="pi pi-sign-out" class="p-button p-button-icon-only" routerLink="/"></button>
+  </div>
+</header>
+
+<!-- Contenedor Principal -->
+<div class="flex">
+  <!-- Sidebar -->
+  <aside class="w-1/5 bg-white p-4 text-sm">
+    <div class="mb-4 text-center">
+      <img *ngIf="user?.photoUrl" [src]="user.photoUrl" alt="User" class="w-12 h-12 rounded-full mx-auto">
+      <div *ngIf="!user?.photoUrl" class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center mx-auto">
+        {{ getInitials(user?.firstName, user?.lastName) }}
+      </div>
+      <h2 class="mt-2 text-xs">{{ user?.firstName }} {{ user?.lastName }}</h2>
+      <p class="text-gray-600 text-xs">{{ user?.role }}</p>
+    </div>
+    <nav>
+      <ul>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/upload-file">Subir archivo</li>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/pet-adoption">Dashboard</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenido Principal -->
+  <div class="w-4/5 h-screen overflow-auto p-4 bg-gray-100 main-content flex flex-col">
+    <!-- Reemplazar la tabla de solicitudes con UploadFileComponent -->
+    <div class="bg-white shadow-md rounded-md p-4 mt-8">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="font-bold text-xl text-gray-800">Subir comprobante</h2>
+      </div>
+      <app-upload-file [id]="id"></app-upload-file>
+    </div>
+  </div>
+</div>

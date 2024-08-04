@@ -1,0 +1,28 @@
+<div class="file-upload-container p-4 bg-white rounded-lg shadow-md">
+
+  <p-fileUpload
+    name="file"
+    accept="image/*"
+    maxFileSize="5000000"
+    mode="advanced"
+    [auto]="false"
+    chooseLabel="Seleccionar Archivo"
+    [showUploadButton]="false"
+    [showCancelButton]="false"
+    class="tailwind-file-upload"
+    (onSelect)="onSelect($event)"
+    (onRemove)="onRemove($event)">
+  </p-fileUpload>
+
+  <div class="flex justify-center items-center space-x-4 mt-4">
+    <button
+      class="bg-green-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+      (click)="onSubmit()"
+      [disabled]="!file || isSubmitted">
+      <i class="pi pi-check mr-2"></i>
+      Enviar
+    </button>
+  </div>
+
+  <p-messages></p-messages>
+</div>

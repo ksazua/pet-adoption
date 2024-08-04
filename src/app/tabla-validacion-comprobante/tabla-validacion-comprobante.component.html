@@ -1,0 +1,127 @@
+<!-- Encabezado -->
+<header class="flex justify-between items-center py-4 px-8 bg-white shadow-md mb-0">
+  <div class="flex items-center">
+    <h1 class="text-2xl font-bold">ProyectoAdoptame</h1>
+  </div>
+  <div class="flex items-center space-x-4">
+    <!-- Imagen de perfil con iniciales -->
+    <div class="relative">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Enner_Valencia_%282020-21_S%C3%BCper_Lig%29_-_Resim1_%28cropped%29.jpg"
+           alt="User" class="w-10 h-10 rounded-full">
+      <div class="absolute bottom-0 right-0 bg-pink-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">
+        JD <!-- Aquí puedes usar la función para obtener las iniciales si lo deseas -->
+      </div>
+    </div>
+    <!-- Botón de notificaciones (campana) -->
+    <button type="button" pButton icon="pi pi-bell" class="p-button p-button-icon-only"></button>
+    <!-- Botón de cerrar sesión -->
+    <button type="button" pButton icon="pi pi-sign-out" class="p-button p-button-icon-only" routerLink="/"></button>
+  </div>
+</header>
+
+
+<!-- Contenedor Principal -->
+<div class="flex">
+  <!-- Sidebar -->
+  <aside class="w-1/5 bg-white p-4 text-sm">
+    <div class="mb-4 text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Enner_Valencia_%282020-21_S%C3%BCper_Lig%29_-_Resim1_%28cropped%29.jpg"
+        alt="User" class="w-12 h-12 rounded-full mx-auto">
+      <h2 class="mt-2 text-xs">Hola, Larissa</h2>
+      <p class="text-gray-600 text-xs">Super admin</p>
+    </div>
+    <nav>
+      <ul>
+        <li class="py-2 px-4 bg-pink-500 text-white rounded-md my-2 cursor-pointer">Validación de comprobante</li>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/tabla-valida-formulario">Validación de formulario</li>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/tabla-rejected">Solicitudes rechazadas</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenido Principal -->
+  <div class="w-4/5 h-screen overflow-auto p-4 bg-gray-100 main-content flex flex-col">
+    <!-- Pet Adoptions Table -->
+    <div class="bg-white shadow-md rounded-md p-4 mt-8">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-20">Tienes {{ petAdoptions.length }} solicitudes en total</h2>
+        <p-toolbar>
+          <div class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" [(ngModel)]="searchTerm" (input)="search()" placeholder="Buscar..."
+              class="w-full py-2 px-4 border border-gray-300 rounded-md pl-10">
+          </div>
+          <select class="page-size-select ml-4" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </p-toolbar>
+      </div>
+
+
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 bg-gray-200 text-sm">ID</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Foto</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Nombre y Apellido</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Correo</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Teléfono</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Dirección</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Comprobante</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let adoption of forms" class="text-center border-b">
+            <td class="py-2 px-4 text-14">{{ adoption.id }}</td>
+            <td class="py-2 px-4 text-14">
+              <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                {{ getInitials(adoption.name, adoption.lastName) }}
+              </div>
+            </td>
+            <td class="py-2 px-4 text-14">{{ adoption.name }} {{ adoption.lastName }}</td>
+            <td class="py-2 px-4 text-14">{{ adoption.email }}</td>
+            <td class="py-2 px-4 text-14">{{ adoption.phoneNumber }}</td>
+            <td class="py-2 px-4 text-14">{{ adoption.address }}</td>
+            <td class="py-2 px-4 text-14">
+              <p-button (click)="verComprobante(adoption.urlPayment)">
+                <i class="pi pi-eye"></i>
+              </p-button>
+            </td>
+
+            <td class="py-2 px-4 ">
+              <button class="button-approve" (click)="aceptar(adoption.id)">
+                <i class="pi pi-check"></i>
+              </button>
+              <button class="button-reject" (click)="rechazar(adoption.id)">
+                <i class="pi pi-times"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-buttons">
+        <button class="pagination-button" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+          Anterior
+        </button>
+        <button class="pagination-button" (click)="changePage(currentPage + 1)"
+                [disabled]="currentPage === Math.ceil(petAdoptions.length / pageSize)">Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [modal]="true"
+  [(visible)]="displayModal"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [maximizable]="true">
+  <img  [src]="receiptImagePath" alt="Comprobante" style="width: 100%; height: auto;">
+</p-dialog>
+
+

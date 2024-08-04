@@ -1,0 +1,74 @@
+<!-- Encabezado -->
+<header class="flex justify-between items-center py-4 px-8 bg-white shadow-md mb-0">
+  <div class="flex items-center">
+    <h1 class="text-2xl font-bold">ProyectoAdoptame</h1>
+  </div>
+  <div class="flex items-center space-x-4">
+    <!-- Imagen de perfil con iniciales -->
+    <div class="relative">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Enner_Valencia_%282020-21_S%C3%BCper_Lig%29_-_Resim1_%28cropped%29.jpg"
+           alt="User" class="w-10 h-10 rounded-full">
+      <div class="absolute bottom-0 right-0 bg-pink-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">
+        JD <!-- Aquí puedes usar la función para obtener las iniciales si lo deseas -->
+      </div>
+    </div>
+    <!-- Botón de cerrar sesión -->
+    <button type="button" pButton icon="pi pi-sign-out" class="p-button p-button-icon-only" routerLink="/"></button>
+  </div>
+</header>
+
+<!-- Contenedor Principal -->
+<div class="flex">
+  <!-- Sidebar -->
+  <aside class="w-1/5 bg-white p-4 text-sm">
+    <div class="mb-4 text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Enner_Valencia_%282020-21_S%C3%BCper_Lig%29_-_Resim1_%28cropped%29.jpg"
+        alt="User" class="w-12 h-12 rounded-full mx-auto">
+      <h2 class="mt-2 text-xs">Hola, Larissa</h2>
+      <p class="text-gray-600 text-xs">Super admin</p>
+    </div>
+    <nav>
+      <ul>
+        <li class="py-2 px-4 bg-pink-500 text-white rounded-md my-2 cursor-pointer">Solicitudes rechazadas</li>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/tabla-valida-formulario">Validación de formulario</li>
+        <li class="py-2 px-4 rounded-md my-2 hover:bg-gray-200 cursor-pointer" routerLink="/tabla-validacion-comprobante">Validación de comprobante</li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenido Principal -->
+  <div class="w-4/5 h-screen overflow-auto p-4 bg-gray-100 main-content flex flex-col">
+    <!-- Solicitudes Rechazadas Table -->
+    <div class="bg-white shadow-md rounded-md p-4 mt-8">
+      <h2 class="text-xl font-bold text-20 mb-4">Solicitudes Rechazadas</h2>
+
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Cédula</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Nombre y Apellido</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Correo</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Teléfono</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Dirección</th>
+            <th class="py-2 px-4 bg-gray-200 text-sm">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let form of forms" class="text-center border-b">
+            <td class="py-2 px-4 text-14">{{ form.dni }}</td>
+            <td class="py-2 px-4 text-14">{{ form.name }} {{ form.lastName }}</td>
+            <td class="py-2 px-4 text-14">{{ form.email }}</td>
+            <td class="py-2 px-4 text-14">{{ form.phoneNumber }}</td>
+            <td class="py-2 px-4 text-14">{{ form.address }}</td>
+            <td class="py-2 px-4">
+              <button class="button-reapprove">
+                <i class="pi pi-check"></i> Reaprobar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <!-- Left side: Login form -->
+    <div class="w-full md:w-1/2 p-8">
+      <h2 class="text-3xl font-bold mb-6 text-center" style="color: #EC4899;">AdoptaME</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium" style="color: rgb(70, 75, 111);">Email</label>
+          <div class="relative">
+            <input id="email" formControlName="email" type="email" class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EC4899] focus:border-[#EC4899] sm:text-sm">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="pi pi-envelope text-gray-400"></i>
+            </span>
+          </div>
+          <div *ngIf="emailField?.errors && emailField?.touched">
+            <small *ngIf="emailField?.hasError('required')">El email es requerido</small>
+            <small *ngIf="emailField?.hasError('email')">Email no válido</small>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium" style="color: rgb(70, 75, 111);">Password</label>
+          <div class="relative">
+            <input id="password" formControlName="password" type="password" class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EC4899] focus:border-[#EC4899] sm:text-sm">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="pi pi-lock text-gray-400"></i>
+            </span>
+          </div>
+          <div *ngIf="passwordField?.errors && passwordField?.touched">
+            <small *ngIf="passwordField?.hasError('required')">La contraseña es requerida</small>
+          </div>
+        </div>
+
+        <div class="mb-6 text-left">
+          <a href="#" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="w-full login-button">
+          Ingresar
+        </button>
+      </form>
+      <div class="mt-4 text-center">
+        <span style="color: rgb(70, 75, 111); font-size: 14px;">¿No tienes cuenta? </span>
+        <a routerLink="/form-adopcion" class="register-link">Regístrate</a>
+      </div>
+    </div>
+
+    <!-- Right side: Image -->
+    <div class="hidden md:block md:w-1/2 bg-cover bg-center" style="background-image: url(https://res.cloudinary.com/ddodvvqcq/image/upload/v1722293408/img/pet-fondo.jpg); background-size: cover; background-position: center;">
+    </div>
+  </div>
+</div>

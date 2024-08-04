@@ -1,0 +1,41 @@
+/* login.component.css */
+
+/* Estilo para el botón "Ingresar" */
+.login-button {
+  background-color: #EC4899; /* Color de fondo del botón */
+  border-color: #EC4899; /* Color del borde del botón */
+  color: white; /* Color del texto del botón */
+  transition: background-color 0.3s, border-color 0.3s; /* Transición suave */
+  padding: 12px 24px; /* Ajusta el padding según sea necesario */
+  font-size: 16px; /* Tamaño de fuente */
+  border-radius: 0.375rem; /* Ajusta el radio del borde */
+  border-width: 1px; /* Ancho del borde */
+  text-align: center; /* Alineación del texto */
+}
+
+.login-button:hover {
+  background-color: #B22453; /* Color de fondo al pasar el ratón */
+  border-color: #B22453; /* Color del borde al pasar el ratón */
+}
+
+/* Estilo para el enlace "¿Olvidaste tu contraseña?" */
+.forgot-password-link {
+  color: #7E8C9B; /* Color inicial del enlace */
+  font-size: 14px; /* Tamaño de fuente */
+  transition: color 0.3s; /* Transición suave */
+}
+
+.forgot-password-link:hover {
+  color: #B22453; /* Color al pasar el ratón */
+}
+
+/* Estilo para el enlace "Regístrate" */
+.register-link {
+  color: #EC4899; /* Color inicial del enlace */
+  font-size: 14px; /* Tamaño de fuente */
+  transition: color 0.3s; /* Transición suave */
+}
+
+.register-link:hover {
+  color: #B22453; /* Color al pasar el ratón */
+}

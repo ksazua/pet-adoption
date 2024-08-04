@@ -1,0 +1,318 @@
+<form [formGroup]="adoptionForm" class="container mt-5" (ngSubmit)="onSubmit($event)">
+  <div class="form-header text-center mb-4">
+    <img src="https://res.cloudinary.com/ddodvvqcq/image/upload/v1722650873/img/formLogo.jpg">
+    <div style="color: #ec4899">CUESTIONARIO PRE-ADOPCIÓN ASOCIACIÓN PROYECTO ADOPTAME</div>
+  </div>
+  <div class="form-description mb-4">
+    El objetivo de este cuestionario es encontrar la combinación perfecta entre mascota y amo óptima, de manera que ambos sean felices tras la adopción.
+    <br><br>
+    Por favor, responda a continuación cada pregunta con la mayor claridad posible, y extiéndase en sus respuestas tanto como desee o crea necesario.
+    Los campos marcados con un asterisco <label style="color: red;">*</label> son obligatorios.
+  </div>
+  <div class="row">
+    <div class="column col-md-6">
+      <fieldset>
+        <legend>Datos Personales</legend>
+        <p>
+          <label for="name">Nombres: <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="name" class="form-control">
+        </p>
+        <div *ngIf="nameField?.errors && nameField?.touched">
+          <small *ngIf="nameField?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="nameField?.hasError('onlyLetters')">Solo se permiten letras</small>
+          <small *ngIf="nameField?.hasError('maxlength')">Debe contener máximo 50 caracteres</small>
+        </div>
+        <p>
+          <label for="lastName">Apellidos: <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="lastName" class="form-control">
+        </p>
+        <div *ngIf="lastNameField?.errors && lastNameField?.touched">
+          <small *ngIf="lastNameField?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="lastNameField?.hasError('onlyLetters')">Solo se permiten letras</small>
+        </div>
+        <p>
+          <label for="dni">Cédula: <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="dni" class="form-control" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <div *ngIf="dniField?.errors && dniField?.touched">
+          <small *ngIf="dniField?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="dniField?.hasError('minlength')">Debe contener mínimo 10 números</small>
+          <small *ngIf="dniField?.hasError('maxlength')">Debe contener máximo 10 números</small>
+          <small *ngIf="dniField?.hasError('onlyNumbers')">Por favor, ingrese solo números</small>
+          <small *ngIf="dniField?.hasError('noRepeatedDigits')">Por favor, no repita los números</small>
+        </div>
+        <p>
+          <label for="birthYear">Año de nacimiento: <label style="color: red;">*</label></label><br>
+          <input type="date" formControlName="birthYear" class="form-control">
+        </p>
+        <div *ngIf="birthYearField?.errors && birthYearField?.touched">
+          <small *ngIf="birthYearField?.hasError('required')">Es un campo requerido</small>
+          <small *ngIf="birthYearField?.hasError('adultAge')">Debe ser mayor de 18 años.</small>
+        </div>
+        <p>
+          <label for="address">Dirección: <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="address" class="form-control">
+          <small class="dir">Calle principal</small><br><br>
+          <input type="text" formControlName="address2" class="form-control">
+          <small class="dir">Calle secundaria</small>
+        </p>
+        <div *ngIf="adoptionForm.get('address')?.errors && adoptionForm.get('address')?.touched">
+          <small *ngIf="adoptionForm.get('address')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="postalCode">Código postal:</label><br>
+          <input type="text" formControlName="postalCode" class="form-control" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <p>
+          <label>Estado civil: <label style="color: red;">*</label></label><br>
+          <input type="radio" formControlName="civilStatus" value="single"> Soltero/a <br>
+          <input type="radio" formControlName="civilStatus" value="married"> Casado/a <br>
+          <input type="radio" formControlName="civilStatus" value="divorced"> Divorciado/a <br>
+          <input type="radio" formControlName="civilStatus" value="widowed"> Viudo/a <br>
+          <input type="radio" formControlName="civilStatus" value="other"> Otro
+        </p>
+        <div *ngIf="adoptionForm.get('civilStatus')?.errors && adoptionForm.get('civilStatus')?.touched">
+          <small *ngIf="adoptionForm.get('civilStatus')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="phoneNumber">Número de teléfono: <label style="color: red;">*</label></label>
+          <input type="text" formControlName="phoneNumber" class="form-control" inputmode="numeric" (keydown)="onDniKeyDown($event)"><br>
+        </p>
+        <div style="margin-top: -4%;" *ngIf="phoneNumberField?.errors && phoneNumberField?.touched">
+          <small *ngIf="phoneNumberField?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="phoneNumberField?.hasError('minlength')">Debe contener mínimo 10 números</small>
+          <small *ngIf="phoneNumberField?.hasError('maxlength')">Debe contener máximo 10 números</small>
+          <small *ngIf="phoneNumberField?.hasError('onlyNumbers')">Por favor, ingrese solo números</small>
+          <small *ngIf="phoneNumberField?.hasError('noRepeatedDigits')">Por favor, no repita los números</small>
+        </div>
+        <label style="display: block; margin-bottom: 0.5%;">Registro de cuenta</label>
+        <p style="margin: 0; padding: 0;">
+          <label for="email" style="margin-top: 2%;">Correo electrónico: <label style="color: red;">*</label></label><br>
+          <input type="email" formControlName="email" placeholder="example@example.com" class="form-control">
+        </p>
+        <div *ngIf="adoptionForm.get('email')?.errors && adoptionForm.get('email')?.touched">
+          <small *ngIf="adoptionForm.get('email')?.hasError('required')">Es un campo requerido</small>
+          <small *ngIf="adoptionForm.get('email')?.hasError('email')">Correo electrónico no válido</small>
+        </div>
+        <p>
+          <label for="password" style="margin: 0; padding: 0;">Contraseña: <label style="color: red;">*</label></label><br>
+        </p>
+        <div style="position: relative;">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            style="padding-right: 40px;">
+          <span
+            (click)="togglePasswordVisibility()"
+            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                      {{ showPassword ? '🙈' : '👁️' }}
+                                  </span>
+        </div>
+        <div *ngIf="adoptionForm.get('password')?.errors && adoptionForm.get('password')?.touched">
+          <small *ngIf="adoptionForm.get('password')?.hasError('required')">Es un campo requerido</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Familia</legend>
+        <p>
+          <label for="familyMembers">¿Cuántas personas viven en su hogar? <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="familyMembers" class="form-control" placeholder="0" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <div *ngIf="adoptionForm.get('familyMembers')?.errors && adoptionForm.get('familyMembers')?.touched">
+          <small *ngIf="adoptionForm.get('familyMembers')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Tiene hijos? <label style="color: red;">*</label></label><br>
+          <input type="radio" formControlName="children" value="Sí"> Sí <br>
+          <input type="radio" formControlName="children" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('children')?.errors && adoptionForm.get('children')?.touched">
+          <small *ngIf="adoptionForm.get('children')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>Si su respuesta fue Sí, ¿Cuántos niños viven en su hogar?</label><br>
+          <input type="text" formControlName="numberOfChildren" class="form-control" placeholder="0" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <div *ngIf="adoptionForm.get('numberOfChildren')?.errors && adoptionForm.get('numberOfChildren')?.touched">
+          <small *ngIf="adoptionForm.get('numberOfChildren')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>En caso de no tener hijos, ¿Tiene pensado tenerlos en un futuro cercano?</label>
+          <input type="radio" formControlName="futureChildren" value="Sí"> Sí <br>
+          <input type="radio" formControlName="futureChildren" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('futureChildren')?.errors && adoptionForm.get('futureChildren')?.touched">
+          <small *ngIf="adoptionForm.get('futureChildren')?.hasError('required')">Es un campo requerido</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Ocupación y Tiempo libre</legend>
+        <p>
+          <label for="occupation">Ocupación: <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="occupation" class="form-control">
+        </p>
+        <div *ngIf="adoptionForm.get('occupation')?.errors && adoptionForm.get('occupation')?.touched">
+          <small *ngIf="adoptionForm.get('occupation')?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="adoptionForm.get('occupation')?.hasError('onlyLetters')">Solo se permiten letras</small>
+        </div>
+        <p>
+          <label for="workHours">¿Cuántas horas al día utiliza para su ocupación? <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="workHours" class="form-control" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <div *ngIf="adoptionForm.get('workHours')?.errors && adoptionForm.get('workHours')?.touched">
+          <small *ngIf="adoptionForm.get('workHours')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="vacations">Si se va de vacaciones, ¿Qué hará con su mascota? <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="vacations" class="form-control">
+        </p>
+        <div *ngIf="adoptionForm.get('vacations')?.errors && adoptionForm.get('vacations')?.touched">
+          <small *ngIf="adoptionForm.get('vacations')?.hasError('required')">Es un campo requerido</small><br>
+          <small *ngIf="adoptionForm.get('vacations')?.hasError('onlyLetters')">Solo se permiten letras</small>
+        </div>
+      </fieldset>
+    </div>
+    <div class="column col-md-6">
+      <fieldset>
+        <legend>Vivienda</legend>
+        <p>
+          <label>Tipo de vivienda: <label style="color: red;">*</label></label><br>
+          <select class="block w-full h-10 bg-white border border-gray-300 rounded-md shadow-sm custom-border" formControlName="houseType">
+            <option value="house">Casa</option>
+            <option value="apartment">Apartamento</option>
+            <option value="other">Otro</option>
+          </select>
+        </p>
+        <div *ngIf="adoptionForm.get('houseType')?.errors && adoptionForm.get('houseType')?.touched">
+          <small *ngIf="adoptionForm.get('houseType')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Es propietario de la vivienda? <label style="color: red;">*</label></label><br>
+          <input type="radio" formControlName="houseOwner" value="Sí"> Sí <br>
+          <input type="radio" formControlName="houseOwner" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('houseOwner')?.errors && adoptionForm.get('houseOwner')?.touched">
+          <small *ngIf="adoptionForm.get('houseOwner')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>Si su respuesta fue No, ¿Tiene permiso del propietario para tener animales en la vivienda?</label><br>
+          <input type="radio" formControlName="housePermission" value="Sí"> Sí <br>
+          <input type="radio" formControlName="housePermission" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('housePermission')?.errors && adoptionForm.get('housePermission')?.touched">
+          <small *ngIf="adoptionForm.get('housePermission')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Tiene patio o jardín? <label style="color: red;">*</label></label><br>
+          <input type="radio" formControlName="yard" value="Sí"> Sí <br>
+          <input type="radio" formControlName="yard" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('yard')?.errors && adoptionForm.get('yard')?.touched">
+          <small *ngIf="adoptionForm.get('yard')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>Si su respuesta fue Sí, ¿está convenientemente vallado para evitar que los perros puedan “irse de paseo”?</label><br>
+          <input type="radio" formControlName="fence" value="Sí"> Sí <br>
+          <input type="radio" formControlName="fence" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('fence')?.errors && adoptionForm.get('fence')?.touched">
+          <small *ngIf="adoptionForm.get('fence')?.hasError('required')">Es un campo requerido</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Sobre la adopción</legend>
+        <p>
+          <label>¿Qué tipo de animal busca? <label style="color: red;">*</label></label><br>
+          <select class="block w-full h-10 bg-white border border-gray-300 rounded-md shadow-sm custom-border" formControlName="petType">
+            <option value="perro">Perro</option>
+            <option value="gato">Gato</option>
+            <option value="other">Otro</option>
+          </select>
+        </p>
+        <div *ngIf="adoptionForm.get('petType')?.errors && adoptionForm.get('petType')?.touched">
+          <small *ngIf="adoptionForm.get('petType')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Por qué desea adoptar una mascota? <label style="color: red;">*</label></label><br>
+          <select class="block w-full h-10 bg-white border border-gray-300 rounded-md shadow-sm custom-border" formControlName="reason">
+            <option value="companionship">Por compañía</option>
+            <option value="breeding">Para cría</option>
+            <option value="hunt">Para caza</option>
+            <option value="guardian">Como guardián</option>
+            <option value="therapy">Como terapia</option>
+            <option value="gift">Como regalo</option>
+            <option value="other">Otro</option>
+          </select>
+        </p>
+        <div *ngIf="adoptionForm.get('reason')?.errors && adoptionForm.get('reason')?.touched">
+          <small *ngIf="adoptionForm.get('reason')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Ha tenido animales anteriormente? <label style="color: red;">*</label></label><br>
+          <input type="radio" formControlName="previousPets" value="Sí"> Sí <br>
+          <input type="radio" formControlName="previousPets" value="No"> No
+        </p>
+        <div *ngIf="adoptionForm.get('previousPets')?.errors && adoptionForm.get('previousPets')?.touched">
+          <small *ngIf="adoptionForm.get('previousPets')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="previousPetsDetails">En caso afirmativo, indique qué tipo de animal ha tenido últimamente y por cuánto tiempo:</label><br>
+          <input type="text" formControlName="previousPetsDetails" class="form-control">
+        </p>
+        <div *ngIf="adoptionForm.get('previousPetsDetails')?.errors && adoptionForm.get('previousPetsDetails')?.touched">
+          <small *ngIf="adoptionForm.get('previousPetsDetails')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="currentPets">¿Cuántas mascotas tiene actualmente? <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="currentPets" class="form-control" placeholder="0" inputmode="numeric" (keydown)="onDniKeyDown($event)">
+        </p>
+        <div *ngIf="adoptionForm.get('currentPets')?.errors && adoptionForm.get('currentPets')?.touched">
+          <small *ngIf="adoptionForm.get('currentPets')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="currentPetDetails">Especifique especie, raza, edad y sexo de cada una:</label><br>
+          <input type="text" formControlName="currentPetDetails" class="form-control" placeholder="gato, persa, 3 años, hembra.">
+        </p>
+        <div *ngIf="adoptionForm.get('currentPetDetails')?.errors && adoptionForm.get('currentPetDetails')?.touched">
+          <small *ngIf="adoptionForm.get('currentPetDetails')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Sus mascotas están castradas/esterilizadas?</label><br>
+          <input type="radio" formControlName="petsNeutered" value="yes"> Sí <br>
+          <input type="radio" formControlName="petsNeutered" value="no"> No
+        </p>
+        <div *ngIf="adoptionForm.get('petsNeutered')?.errors && adoptionForm.get('petsNeutered')?.touched">
+          <small *ngIf="adoptionForm.get('petsNeutered')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label>¿Están sus mascotas al día en sus vacunas?</label><br>
+          <input type="radio" formControlName="petsVaccinated" value="yes"> Sí <br>
+          <input type="radio" formControlName="petsVaccinated" value="no"> No
+        </p>
+        <div *ngIf="adoptionForm.get('petsVaccinated')?.errors && adoptionForm.get('petsVaccinated')?.touched">
+          <small *ngIf="adoptionForm.get('petsVaccinated')?.hasError('required')">Es un campo requerido</small>
+        </div>
+        <p>
+          <label for="financialAbility">¿Cuenta con los medios financieros para la manutención de un animal? (alimento, veterinario, peluquería, posibles emergencias…) <label style="color: red;">*</label></label><br>
+          <input type="text" formControlName="financialAbility" class="form-control">
+        </p>
+        <div *ngIf="adoptionForm.get('financialAbility')?.errors && adoptionForm.get('financialAbility')?.touched">
+          <small *ngIf="adoptionForm.get('financialAbility')?.hasError('required')">Es un campo requerido</small>
+          <small *ngIf="adoptionForm.get('financialAbility')?.hasError('onlyLetters')">Solo se permiten letras</small>
+        </div>
+        <p>
+          <label for="additionalInfo">Por favor, proporcione cualquier otra información que considere importante para su solicitud de adopción:</label><br>
+          <textarea formControlName="additionalInfo" rows="4" class="form-control"></textarea>
+        </p>
+      </fieldset>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <button class="button-orange" type="submit" style="margin-bottom: 3%; margin-right: 10%;">Enviar</button>
+    <button type="button" (click)="onCancel()" class="button-in-or" style="margin-bottom: 3%;">Cancelar</button>
+  </div>
+</form>
+<div class="footer">
+  <small class="note" style="size: 10px;">Nota: Al hacer clic en "Enviar", usted acepta que la información proporcionada es veraz y que la Asociación Una Sola Misión se reserva el derecho de aceptar o rechazar su solicitud de adopción.</small>
+</div>
