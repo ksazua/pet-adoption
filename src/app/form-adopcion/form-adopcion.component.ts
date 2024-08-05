@@ -456,4 +456,8 @@ export class FormAdopcionComponent {
   get petsVaccinatedField() {
     return this.adoptionForm.get('petsVaccinated');
   }
+
+  resolved(captchaResponse: string |null) {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
+  }
 }

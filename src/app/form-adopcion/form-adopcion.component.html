@@ -315,6 +315,11 @@
     <button type="button" (click)="onCancel()" class="button-in-or" style="margin-bottom: 3%;">Cancelar</button>
   </div>
 </form>
+<head>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcHiB8qAAAAANLZO6jySjONElYTkc9q2m7D1YU9"></script>
+  <!-- Your code -->
+</head>
 <div class="footer">
   <small class="note" style="size: 10px;">Nota: Al hacer clic en "Enviar", usted acepta que la información proporcionada es veraz y que ProyectoAdoptame se reserva el derecho de aceptar o rechazar su solicitud de adopción.</small>
 </div>
+<re-captcha (resolved)="resolved($event)" siteKey="6LcHiB8qAAAAANLZO6jySjONElYTkc9q2m7D1YU9"></re-captcha>
