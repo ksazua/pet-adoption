@@ -20,7 +20,7 @@ export interface Form {
   providedIn: 'root'
 })
 export class FormularioService {
-  private apiUrl = 'http://localhost:3000/api/forms';
+  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api/forms';
 
   constructor(private http: HttpClient) {
   }

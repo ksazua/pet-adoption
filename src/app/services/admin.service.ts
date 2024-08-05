@@ -15,7 +15,7 @@ export interface User {
 })
 export class AdminService {
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api';
 
   constructor(private http: HttpClient) { }
 

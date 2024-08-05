@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/login';
+  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api/login';
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +22,7 @@ export class AuthService {
 
   getCurrentUser(email: string): Observable<any> {
     if (email) {
-      return this.http.post<any>(`http://localhost:3000/api/loginById`, {email:email}).pipe(
+      return this.http.post<any>(`https://api.pet-adoption.amauta.education.education/api/loginById`, {email:email}).pipe(
         catchError(error => {
           console.error('Error fetching user:', error);
           return of(null); // Devuelve null en caso de error
