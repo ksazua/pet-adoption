@@ -13,6 +13,7 @@ export interface Form {
   address: string;
   estadoValidacionFormulario: string;
   urlPayment?: string;
+  estadoValidacionPago: string;
   // Add other form fields as needed
 }
 
@@ -20,8 +21,8 @@ export interface Form {
   providedIn: 'root'
 })
 export class FormularioService {
-  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api/forms';
-
+  /* private apiUrl = 'http://localhost:3003/api/forms'; */
+  private apiUrl = 'https://api.pet-adoption.amauta.education/api/forms';
   constructor(private http: HttpClient) {
   }
 
@@ -36,7 +37,13 @@ export class FormularioService {
   rejectForm(id: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/${id}/reject`, {});
   }
+  approveComp(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}/approve-comp`, {});
+  }
 
+  rejectComp(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}/reject-comp`, {});
+  }
   uploadPayment(id: string, payload: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/${id}/upload-payment`, payload);
   }

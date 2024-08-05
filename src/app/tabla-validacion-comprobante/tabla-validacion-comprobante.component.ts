@@ -3,6 +3,7 @@ import {ConfirmationService} from "primeng/api";
 import Swal from "sweetalert2";
 import {Form, FormularioService} from "../services/formulario.service";
 import {User} from "../services/admin.service";
+import { response } from 'express';
 
 interface PetAdoption {
   id: number;
@@ -118,7 +119,7 @@ export class TablaValidacionComprobanteComponent {
   fetchForms(): void {
     this.formularioService.getFormsAll().subscribe(
       response => {
-        this.forms = response.filter(form => form.estadoValidacionFormulario === 'approved');
+        this.forms = response.filter(form => form.estadoValidacionFormulario === 'approved' && form.estadoValidacionPago === 'pending');
       },
       error => {
         console.error('Error fetching forms:', error);
@@ -235,7 +236,7 @@ export class TablaValidacionComprobanteComponent {
   displayModal: boolean = false;
 
   verComprobante(receiptPath: string = '') {
-    this.receiptImagePath = 'http://localhost:3000/' + receiptPath;
+    this.receiptImagePath = 'http://localhost:3003/' + receiptPath;
     this.displayModal = true;
     this.cd.detectChanges();
   }
@@ -248,6 +249,69 @@ export class TablaValidacionComprobanteComponent {
         console.error('Error fetching rejected forms:', error);
       }
     );
+  }
+  approveComp(id: string): void {
+    Swal.fire({
+      title: '¿Estás seguro de que deseas aprobar?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#6abfab',
+      cancelButtonColor: '#ff1493',
+      confirmButtonText: 'Sí, apruébalo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.formularioService.approveComp(id).subscribe(
+          () => {
+            Swal.fire('Aprobado!', 'El comprobante ha sido aceptado.', 'success');
+            this.approveCompList(id); // Aprueba el formulario aprobado de la lista
+          },
+          error => {
+            console.error('Error approving form:', error);
+            Swal.fire('Error', 'Hubo un error al aprobar el comprobante.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+  rejectComp(id: string): void {
+    Swal.fire({
+      title: '¿Estás seguro de que deseas rechazar?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#6abfab',
+      cancelButtonColor: '#ff1493',
+      confirmButtonText: 'Sí, recházalo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.formularioService.rejectForm(id).subscribe(
+          () => {
+            Swal.fire('Rechazado!', 'La adopción ha sido rechazada.', 'success');
+            this.removeComp(id); // Elimina el formulario rechazado de la lista
+          },
+          error => {
+            console.error('Error rejecting form:', error);
+            Swal.fire('Error', 'Hubo un error al rechazar el formulario.', 'error');
+          }
+        );
+      }
+    });
+  }
+  removeComp(id: string): void {
+    this.formularioService.rejectComp(id).subscribe(
+      response  => {
+        this.fetchForms();
+      }
+    )
+  }
+  approveCompList(id: string): void {
+    this.formularioService.approveComp(id).subscribe(
+      response  => {
+        this.fetchForms();
+      }
+    )
   }
 }
 

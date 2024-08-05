@@ -15,8 +15,8 @@ export interface User {
 })
 export class AdminService {
 
-  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api';
-
+  private apiUrl = 'https://api.pet-adoption.amauta.education/api';
+ // private apiUrl = 'http://localhost:3003/api';
   constructor(private http: HttpClient) { }
 
   getLoggedInUser(id: string, password: string): Observable<User> {

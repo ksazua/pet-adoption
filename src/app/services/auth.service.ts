@@ -7,12 +7,13 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://api.pet-adoption.amauta.education.education/api/login';
+  private apiUrl = 'https://api.pet-adoption.amauta.education/api';
+  /*private apiUrl = 'http://localhost:3003/api';*/
 
   constructor(private http: HttpClient) {}
 
   login(credentials: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       catchError(error => {
         console.error('Login error:', error);
         return of(null); // Devuelve null en caso de error
@@ -22,7 +23,7 @@ export class AuthService {
 
   getCurrentUser(email: string): Observable<any> {
     if (email) {
-      return this.http.post<any>(`https://api.pet-adoption.amauta.education.education/api/loginById`, {email:email}).pipe(
+      return this.http.post<any>(`${this.apiUrl}/loginById`, {email:email}).pipe(
         catchError(error => {
           console.error('Error fetching user:', error);
           return of(null); // Devuelve null en caso de error
