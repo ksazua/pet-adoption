@@ -23,7 +23,7 @@ export class TablaValidaFormularioComponent implements OnInit {
     this.user = {
       name: localStorage.getItem('name')!,
       email: localStorage.getItem('email')!,
-      role: localStorage.getItem('role')!,
+      role: localStorage.getItem('role')!
     };
   }
 

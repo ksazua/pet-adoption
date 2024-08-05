@@ -236,7 +236,7 @@ export class TablaValidacionComprobanteComponent {
   displayModal: boolean = false;
 
   verComprobante(receiptPath: string = '') {
-    this.receiptImagePath = 'http://localhost:3003/' + receiptPath;
+    this.receiptImagePath = 'https://api.pet-adoption.amauta.education/' + receiptPath;
     this.displayModal = true;
     this.cd.detectChanges();
   }
