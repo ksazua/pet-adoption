@@ -239,6 +239,16 @@ export class TablaValidacionComprobanteComponent {
     this.displayModal = true;
     this.cd.detectChanges();
   }
+  fetchApprovedForms(): void {
+    this.formularioService.getFormsAll().subscribe(
+      response => {
+        this.forms = response.filter(form => form.estadoValidacionFormulario === 'approved');
+      },
+      error => {
+        console.error('Error fetching rejected forms:', error);
+      }
+    );
+  }
 }
 
 
