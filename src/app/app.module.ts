@@ -28,7 +28,7 @@ import {ConfirmationService} from 'primeng/api';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import { LoginComponent } from './login/login.component';
 import { TablaRejectedComponent } from './tabla-rejected/tabla-rejected.component';
-import {RecaptchaModule} from "ng-recaptcha";
+
 
 
 
@@ -65,7 +65,7 @@ import {RecaptchaModule} from "ng-recaptcha";
         MatIcon,
         MenuModule,
         ConfirmDialogModule,
-        RecaptchaModule
+
 
     ],
   providers: [

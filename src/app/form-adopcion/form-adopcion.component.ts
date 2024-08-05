@@ -76,7 +76,6 @@ export function ecuadorianIdValidator(): ValidatorFn {
 export class FormAdopcionComponent {
   adoptionForm!: FormGroup;
   showPassword: boolean = false;
-  siteKey: string = '6LdlpR8qAAAAAJbw2XWCNalHezMS_fLL6ZlA_GEc';  // Reemplaza con tu clave de sitio de reCAPTCHA
 
   constructor(private fb: FormBuilder, private router: Router, private adoptionService: AdoptionService) {
     this.buildForm();
@@ -135,7 +134,6 @@ export class FormAdopcionComponent {
       petsVaccinated: [{ value: '', disabled: true }],
       financialAbility: new FormControl('', [Validators.required, onlyLettersValidator()]),
       additionalInfo: ['', Validators.required],
-      recaptcha: new FormControl('', Validators.required)  // Agregar reCAPTCHA al formulario
     });
 
     this.adoptionForm.get('children')?.valueChanges.subscribe(value => {
@@ -283,9 +281,6 @@ export class FormAdopcionComponent {
     }
   }
 
-  resolved(captchaResponse: string | null): void {
-    this.adoptionForm.controls['recaptcha'].setValue(captchaResponse);
-  }
 
   onSubmit(event: Event): void {
     event.preventDefault();
@@ -460,9 +455,5 @@ export class FormAdopcionComponent {
 
   get petsVaccinatedField() {
     return this.adoptionForm.get('petsVaccinated');
-  }
-
-  get recaptchaField() {
-    return this.adoptionForm.get('recaptcha');
   }
 }
