@@ -1,9 +1,9 @@
-import {Component, inject, Input} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from 'primeng/api';
-import {format} from 'date-fns';
-import {FormularioService} from "../services/formulario.service";
-import {response} from "express";
+import { Component, inject, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { FormularioService } from '../services/formulario.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-file',
@@ -15,9 +15,9 @@ export class UploadFileComponent {
   form: FormGroup;
   file: File | null = null;
   isSubmitted = false;
-  private readonly formularioService = inject(FormularioService);
+  protected readonly formularioService = inject(FormularioService);
 
-  constructor(private messageService: MessageService, private fb: FormBuilder) {
+  constructor(private messageService: MessageService, private fb: FormBuilder, private router: Router) {
     this.form = this.fb.group({
       name: ['', Validators.required]
     });
@@ -56,7 +56,7 @@ export class UploadFileComponent {
   onRemove(event: any) {
     this.file = null;
     this.isSubmitted = false;
-    this.messageService.add({severity: 'info', summary: 'Archivo eliminado', detail: `El archivo ha sido eliminado.`});
+    this.messageService.add({ severity: 'info', summary: 'Archivo eliminado', detail: `El archivo ha sido eliminado.` });
   }
 
   onSubmit() {
@@ -64,9 +64,23 @@ export class UploadFileComponent {
       const payload = new FormData();
       payload.append('file', this.file);
 
-      this.formularioService.uploadPayment(this.id, payload).subscribe(response => {
-        console.log(response);
-      });
+      this.formularioService.uploadPayment(this.id, payload).subscribe(
+        response => {
+          Swal.fire({
+            title: 'Subido con éxito!',
+            text: 'El archivo se ha subido correctamente.',
+            icon: 'success',
+            confirmButtonColor: '#6abfab',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.router.navigate(['/pet-adoption']);
+          });
+        },
+        error => {
+          console.error('Error uploading file:', error);
+          Swal.fire('Error', 'Hubo un error al subir el archivo.', 'error');
+        }
+      );
     }
   }
 }

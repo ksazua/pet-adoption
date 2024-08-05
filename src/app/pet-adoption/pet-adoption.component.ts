@@ -35,7 +35,7 @@ export class PetAdoptionComponent implements OnInit {
   form!: any;
 
   steps: Step[] = [
-    {label: 'Solicitud', icon: 'pi pi-file', date: 'Jul 12', status: 'completed'},
+    {label: 'Solicitud', icon: 'pi pi-file', date: '', status: 'completed'},
   ];
 
   constructor(
@@ -76,34 +76,34 @@ export class PetAdoptionComponent implements OnInit {
 
           if (response.estadoValidacionFormulario == 'pending') {
             this.steps.push(
-              {label: 'Pendiente', icon: 'pi pi-pause', date: 'Jul 12', status: 'hold'}, // Cambiado aquí
+              {label: 'Pendiente', icon: 'pi pi-pause', date: 'Formulario', status: 'hold'},
             )
           }
           if (response.estadoValidacionFormulario == 'approved') {
             this.steps.push(
-              {label: 'Aprobado', icon: 'pi pi-check', date: 'Jul 12', status: 'completed'},
+              {label: 'Aprobado', icon: 'pi pi-check', date: 'Formulario', status: 'completed'},
             )
           }
           if (response.estadoValidacionFormulario == 'rejected') {
             this.steps.push(
-              {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'rejected'},
+              {label: 'Rechazado', icon: 'pi pi-ban', date: 'Formulario ', status: 'rejected'},
             )
           }
 
           if (response.estadoValidacionFormulario == 'approved') {
             if (response.estadoValidacionPago == 'pending') {
               this.steps.push(
-                {label: 'Pendiente', icon: 'pi pi-pause', date: 'Jul 12', status: 'hold'}, // Cambiado aquí también
+                {label: 'Pendiente', icon: 'pi pi-pause', date: 'Pago', status: 'hold'},
               )
             }
             if (response.estadoValidacionPago == 'approved') {
               this.steps.push(
-                {label: 'Aprobado', icon: 'pi pi-check', date: 'Jul 12', status: 'completed'},
+                {label: 'Aprobado', icon: 'pi pi-check', date: 'Pago', status: 'completed'},
               )
             }
             if (response.estadoValidacionPago == 'rejected') {
               this.steps.push(
-                {label: 'Rechazado', icon: 'pi pi-ban', date: 'Jul 12', status: 'rejected'},
+                {label: 'Rechazado', icon: 'pi pi-ban', date: 'Pago', status: 'rejected'},
               )
             }
           }
