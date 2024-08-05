@@ -71,7 +71,8 @@ export class PetAdoptionComponent implements OnInit {
             financialAbility: response.financialAbility,
             occupation: response.occupation,
             previousPets: response.previousPets,
-            estadoValidacionFormulario: response.estadoValidacionFormulario
+            estadoValidacionFormulario: response.estadoValidacionFormulario,
+            estadoValidacionPago: response.estadoValidacionPago
           };
 
           if (response.estadoValidacionFormulario == 'pending') {
@@ -155,15 +156,25 @@ export class PetAdoptionComponent implements OnInit {
   }
 
   isPaymentEnabled(): boolean {
-    return this.form?.estadoValidacionFormulario === 'approved';
+    return this.user?.estadoValidacionFormulario === 'approved' &&
+           this.user?.estadoValidacionPago !== 'approved' &&
+           this.user?.estadoValidacionPago !== 'rejected'
   }
 
   handlePaymentClick(): void {
     if (!this.isPaymentEnabled()) {
+      let message = 'Su pago no está disponible en este momento.';
+      if (this.user?.estadoValidacionPago === 'approved') {
+        message = 'Su pago ya se completó. Contáctese por correo o teléfono.';
+      } else if (this.user?.estadoValidacionPago === 'pending') {
+        message = 'Su pago no esta disponible en este momento.';
+      } else if (this.user?.estadoValidacionPago === 'rejected') {
+        message = 'Su pago ha sido rechazado. Por favor, contacte al soporte.';
+      }
       Swal.fire({
         icon: 'info',
         title: 'Información',
-        text: 'Su pago no está disponible en este momento.',
+        text: message,
         confirmButtonText: 'Aceptar'
       });
     } else {
@@ -178,7 +189,7 @@ export class PetAdoptionComponent implements OnInit {
       Swal.fire({
         icon: 'info',
         title: 'En Revisión',
-        text: 'Su pago no está disponible, su solicitud está en revisión.',
+        text: 'Su pago no está disponible.',
         confirmButtonText: 'Aceptar'
       });
     }
@@ -198,11 +209,20 @@ export class PetAdoptionComponent implements OnInit {
     if (!value) return value;
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
   }
+
   getStatusBoxClass(): string {
     if (this.user?.estadoValidacionFormulario === 'rejected') {
       return 'bg-red-100 text-red-500 w-8 h-8 flex items-center justify-center rounded-md';
     } else if (this.user?.estadoValidacionFormulario === 'approved') {
-      return 'bg-blue-100 text-blue-500 w-8 h-8 flex items-center justify-center rounded-md';
+      if (this.user?.estadoValidacionPago === 'approved') {
+        return 'bg-green-100 text-green-500 w-8 h-8 flex items-center justify-center rounded-md';
+      } else if (this.user?.estadoValidacionPago === 'rejected') {
+        return 'bg-red-100 text-red-500 w-8 h-8 flex items-center justify-center rounded-md';
+      } else if (this.user?.estadoValidacionPago === 'pending') {
+        return 'bg-blue-100 text-blue-500 w-8 h-8 flex items-center justify-center rounded-md';
+      } else {
+        return 'bg-yellow-100 text-yellow-400 w-8 h-8 flex items-center justify-center rounded-md';
+      }
     } else {
       return 'bg-yellow-100 text-yellow-400 w-8 h-8 flex items-center justify-center rounded-md';
     }
@@ -212,7 +232,15 @@ export class PetAdoptionComponent implements OnInit {
     if (this.user?.estadoValidacionFormulario === 'rejected') {
       return 'pi pi-times';
     } else if (this.user?.estadoValidacionFormulario === 'approved') {
-      return 'pi pi-clock';
+      if (this.user?.estadoValidacionPago === 'approved') {
+        return 'pi pi-check';
+      } else if (this.user?.estadoValidacionPago === 'rejected') {
+        return 'pi pi-times';
+      } else if (this.user?.estadoValidacionPago === 'pending') {
+        return 'pi pi-clock';
+      } else {
+        return 'pi pi-clock';
+      }
     } else {
       return 'pi pi-envelope';
     }
@@ -222,7 +250,15 @@ export class PetAdoptionComponent implements OnInit {
     if (this.user?.estadoValidacionFormulario === 'rejected') {
       return 'Solicitud rechazada';
     } else if (this.user?.estadoValidacionFormulario === 'approved') {
-      return 'En espera de su comprobante';
+      if (this.user?.estadoValidacionPago === 'approved') {
+        return 'Pago aprobado';
+      } else if (this.user?.estadoValidacionPago === 'rejected') {
+        return 'Pago rechazado';
+      } else if (this.user?.estadoValidacionPago === 'pending') {
+        return 'En espera de su pago';
+      } else {
+        return 'En espera de su comprobante';
+      }
     } else {
       return 'Revisión iniciada';
     }
