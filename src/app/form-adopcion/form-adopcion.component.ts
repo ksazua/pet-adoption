@@ -287,7 +287,7 @@ export class FormAdopcionComponent {
     if (this.adoptionForm.valid) {
       Swal.fire({
         title: "¿Está seguro?",
-        text: "Usted acepta que la información proporcionada es veraz y que la Asociación Una Sola Misión se reserva el derecho de aceptar o rechazar su solicitud de adopción.",
+        text: "Usted acepta que la información proporcionada es veraz y Proyecto Adoptame se reserva el derecho de aceptar o rechazar su solicitud de adopción.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
