@@ -1,4 +1,5 @@
 <form [formGroup]="adoptionForm" class="container mt-5" (ngSubmit)="onSubmit($event)">
+  <!-- otros campos del formulario -->
   <div class="form-header text-center mb-4">
     <img src="https://res.cloudinary.com/ddodvvqcq/image/upload/v1722650873/img/formLogo.jpg">
     <div style="color: #ec4899">CUESTIONARIO PRE-ADOPCIÓN ASOCIACIÓN PROYECTO ADOPTAME</div>
@@ -307,6 +308,10 @@
         </p>
       </fieldset>
     </div>
+  </div>
+  <div class="text-center mt-4">
+    <re-captcha [siteKey]="siteKey || ''" (resolved)="resolved($event)"></re-captcha>
+
   </div>
   <div class="text-center mt-4">
     <button class="button-orange" type="submit" style="margin-bottom: 3%; margin-right: 10%;">Enviar</button>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AdoptionService } from '../services/adoption.service';
 import Swal from 'sweetalert2';
 
+// Validadores personalizados
 export function onlyLettersValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
@@ -28,22 +29,42 @@ export function noRepeatedDigitsValidator(): ValidatorFn {
   };
 }
 
-export function adultAgeValidator(): ValidatorFn {
+export function ecuadorianIdValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
-    if (!value) return null;
-
-    const birthDate = new Date(value);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-    const dayDifference = today.getDate() - birthDate.getDate();
-
-    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-      age--;
+    if (!value) {
+      return null;
     }
 
-    return age >= 18 ? null : { 'adultAge': { value } };
+    // La cédula ecuatoriana debe tener 10 dígitos
+    if (value.length !== 10) {
+      return { invalidLength: true };
+    }
+
+    // Los dos primeros dígitos deben estar entre 01 y 24 (provincias) o ser 30 (extranjeros)
+    const provinceCode = parseInt(value.slice(0, 2), 10);
+    if ((provinceCode < 1 || provinceCode > 24) && provinceCode !== 30) {
+      return { invalidProvinceCode: true };
+    }
+
+    // El último dígito es un dígito verificador
+    const digits = value.split('').map(Number);
+    const verifier = digits.pop();
+    const coefficients = [2, 1, 2, 1, 2, 1, 2, 1, 2];
+    const total = digits.reduce((acc: number, digit: number, index: number) => {
+      let product = digit * coefficients[index];
+      if (product >= 10) {
+        product -= 9;
+      }
+      return acc + product;
+    }, 0);
+
+    const calculatedVerifier = (10 - (total % 10)) % 10;
+    if (calculatedVerifier !== verifier) {
+      return { invalidVerifier: true };
+    }
+
+    return null;
   };
 }
 
@@ -55,6 +76,7 @@ export function adultAgeValidator(): ValidatorFn {
 export class FormAdopcionComponent {
   adoptionForm!: FormGroup;
   showPassword: boolean = false;
+  siteKey: string = '6LdlpR8qAAAAAJbw2XWCNalHezMS_fLL6ZlA_GEc';  // Reemplaza con tu clave de sitio de reCAPTCHA
 
   constructor(private fb: FormBuilder, private router: Router, private adoptionService: AdoptionService) {
     this.buildForm();
@@ -66,15 +88,28 @@ export class FormAdopcionComponent {
 
   private buildForm(): void {
     this.adoptionForm = this.fb.group({
-      name: new FormControl ('', [Validators.required, Validators.maxLength(50), onlyLettersValidator()]),
-      lastName: new FormControl ('', [Validators.required, onlyLettersValidator()]),
-      dni: new FormControl('',[Validators.required,Validators.maxLength(10),Validators.minLength(10), onlyNumbersValidator(), noRepeatedDigitsValidator()]),
-      birthYear: ['', [Validators.required, adultAgeValidator()]],
+      name: new FormControl('', [Validators.required, Validators.maxLength(50), onlyLettersValidator()]),
+      lastName: new FormControl('', [Validators.required, onlyLettersValidator()]),
+      dni: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        onlyNumbersValidator(),
+        noRepeatedDigitsValidator(),
+        ecuadorianIdValidator()
+      ]),
+      birthYear: ['', [Validators.required]],
       address: ['', Validators.required],
       address2: [''],
       postalCode: ['', onlyNumbersValidator()],
       civilStatus: ['', Validators.required],
-      phoneNumber: new FormControl('',[Validators.required,Validators.maxLength(10),Validators.minLength(10), onlyNumbersValidator(), noRepeatedDigitsValidator()]),
+      phoneNumber: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(10),
+        Validators.minLength(10),
+        onlyNumbersValidator(),
+        noRepeatedDigitsValidator()
+      ]),
       phoneNumber2: [''],
       email: ['', [Validators.required, Validators.email]],
       password: new FormControl('', [Validators.required]),
@@ -82,9 +117,9 @@ export class FormAdopcionComponent {
       children: ['', Validators.required],
       numberOfChildren: [{ value: '', disabled: true }],
       futureChildren: [{ value: '', disabled: true }],
-      occupation: new FormControl ('', [Validators.required, onlyLettersValidator()]),
+      occupation: new FormControl('', [Validators.required, onlyLettersValidator()]),
       workHours: ['', Validators.required],
-      vacations: new FormControl ('', [Validators.required, onlyLettersValidator()]),
+      vacations: new FormControl('', [Validators.required, onlyLettersValidator()]),
       houseType: ['', Validators.required],
       houseOwner: ['', Validators.required],
       housePermission: [{ value: '', disabled: true }],
@@ -98,8 +133,9 @@ export class FormAdopcionComponent {
       currentPetDetails: [{ value: '', disabled: true }],
       petsNeutered: [{ value: '', disabled: true }],
       petsVaccinated: [{ value: '', disabled: true }],
-      financialAbility: new FormControl ('', [Validators.required, onlyLettersValidator()]),
-      additionalInfo: ['', Validators.required]
+      financialAbility: new FormControl('', [Validators.required, onlyLettersValidator()]),
+      additionalInfo: ['', Validators.required],
+      recaptcha: new FormControl('', Validators.required)  // Agregar reCAPTCHA al formulario
     });
 
     this.adoptionForm.get('children')?.valueChanges.subscribe(value => {
@@ -247,6 +283,9 @@ export class FormAdopcionComponent {
     }
   }
 
+  resolved(captchaResponse: string | null): void {
+    this.adoptionForm.controls['recaptcha'].setValue(captchaResponse);
+  }
 
   onSubmit(event: Event): void {
     event.preventDefault();
@@ -292,6 +331,8 @@ export class FormAdopcionComponent {
     this.adoptionForm.reset();
     this.router.navigate(['/']);
   }
+
+  // Métodos para obtener los campos del formulario
 
   get nameField() {
     return this.adoptionForm.get('name');
@@ -421,11 +462,7 @@ export class FormAdopcionComponent {
     return this.adoptionForm.get('petsVaccinated');
   }
 
-  get petsPermissionField() {
-    return this.adoptionForm.get('petsPermission');
-  }
-
-  get petsPermissionDetailsField() {
-    return this.adoptionForm.get('petsPermissionDetails');
+  get recaptchaField() {
+    return this.adoptionForm.get('recaptcha');
   }
 }

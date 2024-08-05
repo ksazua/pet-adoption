@@ -28,6 +28,7 @@ import {ConfirmationService} from 'primeng/api';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import { LoginComponent } from './login/login.component';
 import { TablaRejectedComponent } from './tabla-rejected/tabla-rejected.component';
+import {RecaptchaModule} from "ng-recaptcha";
 
 
 
@@ -45,27 +46,28 @@ import { TablaRejectedComponent } from './tabla-rejected/tabla-rejected.componen
     TablaRejectedComponent
 
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    TableModule,
-    ButtonModule,
-    InputTextModule,
-    TimelineModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ToolbarModule,
-    DialogModule,
-    BrowserAnimationsModule,
-    FileUploadModule,
-    ToastModule,
-    HttpClientModule,
-    MatMenuModule,
-    MatIcon,
-    MenuModule,
-    ConfirmDialogModule
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        TableModule,
+        ButtonModule,
+        InputTextModule,
+        TimelineModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ToolbarModule,
+        DialogModule,
+        BrowserAnimationsModule,
+        FileUploadModule,
+        ToastModule,
+        HttpClientModule,
+        MatMenuModule,
+        MatIcon,
+        MenuModule,
+        ConfirmDialogModule,
+        RecaptchaModule
 
-  ],
+    ],
   providers: [
     provideClientHydration(),
     MessageService,
