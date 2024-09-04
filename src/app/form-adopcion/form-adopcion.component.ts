@@ -51,15 +51,18 @@ export function ecuadorianIdValidator(): ValidatorFn {
     const digits = value.split('').map(Number);
     const verifier = digits.pop();
     const coefficients = [2, 1, 2, 1, 2, 1, 2, 1, 2];
-    const total = digits.reduce((acc: number, digit: number, index: number) => {
-      let product = digit * coefficients[index];
+
+    let total = 0;
+    coefficients.forEach((coef, index) => {
+      let product = digits[index] * coef;
       if (product >= 10) {
         product -= 9;
       }
-      return acc + product;
-    }, 0);
+      total += product;
+    });
 
     const calculatedVerifier = (10 - (total % 10)) % 10;
+
     if (calculatedVerifier !== verifier) {
       return { invalidVerifier: true };
     }
@@ -68,10 +71,11 @@ export function ecuadorianIdValidator(): ValidatorFn {
   };
 }
 
+
 @Component({
   selector: 'app-form-adopcion',
   templateUrl: './form-adopcion.component.html',
-  styleUrls: ['./form-adopcion.component.scss']
+  styleUrls: ['./form-adopcion.component.css']
 })
 export class FormAdopcionComponent {
   adoptionForm!: FormGroup;

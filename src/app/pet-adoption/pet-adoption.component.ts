@@ -17,7 +17,7 @@ interface PetAdoption {
   ocupacion: string;
 }
 
-interface Step {
+export interface Step {
   label: string;
   icon: string;
   date: string;
